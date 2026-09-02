@@ -30,7 +30,7 @@ export default function ScenariosPage() {
             <Link
               key={s.id}
               to={`/scenarios/${s.id}`}
-              className="panel-white"
+              className="panel-white panel-link"
               style={{ color: "var(--ink)", display: "flex", gap: 16, alignItems: "flex-start" }}
             >
               <span style={{ minWidth: 0, flex: 1 }}>

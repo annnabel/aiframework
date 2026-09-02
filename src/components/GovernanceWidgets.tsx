@@ -21,9 +21,9 @@ export function RegTimeline() {
 
   return (
     <div>
-      <div className="mode-toggle" role="tablist" aria-label="Filter by jurisdiction" style={{ marginBottom: 16 }}>
+      <div className="mode-toggle" role="group" aria-label="Filter by jurisdiction" style={{ marginBottom: 16 }}>
         {(["all", "EU", "AU", "US/Global"] as const).map((j) => (
-          <button key={j} role="tab" aria-selected={jur === j} className={jur === j ? "active" : ""} onClick={() => setJur(j)}>
+          <button key={j} aria-pressed={jur === j} className={jur === j ? "active" : ""} onClick={() => setJur(j)}>
             {j === "all" ? "All" : j}
           </button>
         ))}
@@ -63,7 +63,7 @@ export function RegTimeline() {
                 <span style={{ marginLeft: "auto", color: "var(--ink-3)" }}>{expanded ? "−" : "+"}</span>
               </button>
               {expanded && (
-                <div className="rise" style={{ padding: "0 14px 12px 144px", fontSize: "var(--fs-sm)", color: "var(--ink-2)" }}>
+                <div className="rise timeline-detail" style={{ fontSize: "var(--fs-sm)", color: "var(--ink-2)" }}>
                   {r.detail}
                 </div>
               )}

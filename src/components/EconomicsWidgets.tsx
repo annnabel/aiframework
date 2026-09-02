@@ -21,12 +21,7 @@ export function FiveLinks() {
           <span key={l.id} style={{ display: "flex", alignItems: "center", gap: 6 }}>
             {i > 0 && <span aria-hidden style={{ color: "var(--ink-3)" }}>→</span>}
             <button
-              className="btn btn-sm"
-              style={
-                open === l.id
-                  ? { background: "var(--crimson)", color: "white", border: "1px solid var(--crimson)" }
-                  : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-              }
+              className="btn btn-sm btn-toggle btn-toggle-accent"
               onClick={() => setOpen(l.id)}
               aria-pressed={open === l.id}
             >

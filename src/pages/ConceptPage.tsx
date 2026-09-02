@@ -41,7 +41,7 @@ export default function ConceptPage() {
         </Link>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "start" }}>
+      <div className="with-minimap" style={{ gap: 32 }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
             <span className="tag tag-neutral">{categoryLabels[c.category]}</span>
@@ -137,7 +137,7 @@ export default function ConceptPage() {
           </div>
         </div>
 
-        <div style={{ width: 200 }} className="concept-side">
+        <div className="minimap-col">
           <p style={{ fontSize: "var(--fs-xs)", color: "var(--ink-3)", marginBottom: 8 }}>On the map</p>
           <MiniMap hot={[c.layer]} />
         </div>

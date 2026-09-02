@@ -71,9 +71,9 @@ export default function Architecture() {
       </div>
 
       <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap", marginBottom: 24 }}>
-        <div className="mode-toggle" role="tablist" aria-label="Explorer view mode">
+        <div className="mode-toggle" role="group" aria-label="Explorer view mode">
           {(Object.keys(modeCopy) as Mode[]).map((m) => (
-            <button key={m} role="tab" aria-selected={mode === m} className={mode === m ? "active" : ""} onClick={() => setMode(m)}>
+            <button key={m} aria-pressed={mode === m} className={mode === m ? "active" : ""} onClick={() => setMode(m)}>
               {modeCopy[m].label}
             </button>
           ))}
@@ -82,14 +82,13 @@ export default function Architecture() {
       </div>
 
       <div className="walk-grid">
-        <div className="walk-steps" role="tablist" aria-label="Walkthrough steps">
+        <nav className="walk-steps" aria-label="Walkthrough steps">
           {walkthroughSteps.map((s) => {
             const included = s.modes.includes(mode);
             return (
               <button
                 key={s.num}
-                role="tab"
-                aria-selected={s.num === step.num}
+                aria-current={s.num === step.num ? "step" : undefined}
                 className={`walk-step-btn${s.num === step.num ? " active" : ""}${included ? "" : " excluded"}`}
                 onClick={() => included && setStepNum(s.num)}
                 disabled={!included}
@@ -100,7 +99,7 @@ export default function Architecture() {
               </button>
             );
           })}
-        </div>
+        </nav>
 
         <div className="walk-card rise" key={`${mode}-${step.num}`}>
           <div className="walk-card-head">

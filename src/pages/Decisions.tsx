@@ -52,12 +52,7 @@ export default function DecisionsPage() {
         {tools.map((t) => (
           <button
             key={t.id}
-            className="btn btn-sm"
-            style={
-              tool === t.id
-                ? { background: "var(--ink)", color: "white", border: "1px solid var(--ink)" }
-                : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-            }
+            className="btn btn-sm btn-toggle"
             onClick={() => setParams({ tool: t.id })}
             aria-pressed={tool === t.id}
             title={t.desc}
@@ -109,12 +104,7 @@ function BuildGuide() {
               {q.options.map((o) => (
                 <button
                   key={o.id}
-                  className="btn btn-sm"
-                  style={
-                    val === o.id
-                      ? { background: "var(--crimson)", color: "white", border: "1px solid var(--crimson)" }
-                      : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-                  }
+                  className="btn btn-sm btn-toggle btn-toggle-accent"
                   onClick={() => {
                     setAnswers({ ...answers, [q.id]: o.id });
                     setDone(false);
@@ -234,7 +224,7 @@ function WhereFits() {
       )}
 
       {c && layer && (
-        <div className="rise" style={{ marginTop: 24, display: "grid", gridTemplateColumns: "1fr auto", gap: 28, alignItems: "start" }}>
+        <div className="rise with-minimap" style={{ marginTop: 24 }}>
           <div style={{ minWidth: 0 }}>
             <h3>{c.term}</h3>
             <div className="detail-block">
@@ -274,7 +264,7 @@ function WhereFits() {
               Full concept page →
             </Link>
           </div>
-          <div style={{ width: 200 }}>
+          <div className="minimap-col">
             <MiniMap hot={[c.layer]} />
           </div>
         </div>
@@ -302,12 +292,7 @@ function QuestionsPlaybook({ initialAud }: { initialAud: string | null }) {
         {audiences.map((a) => (
           <button
             key={a.id}
-            className="btn btn-sm"
-            style={
-              aud === a.id
-                ? { background: "var(--crimson)", color: "white", border: "1px solid var(--crimson)" }
-                : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-            }
+            className="btn btn-sm btn-toggle btn-toggle-accent"
             onClick={() => setAud(a.id)}
             aria-pressed={aud === a.id}
           >
@@ -432,10 +417,11 @@ function VendorsTool() {
         <table className="data">
           <thead>
             <tr>
-              <th>Vendor</th>
+              <th scope="col">Vendor</th>
               {gridLayers.map((l) => (
-                <th key={l.id} title={l.name}>
+                <th key={l.id} scope="col" title={l.name}>
                   L{l.num}
+                  <span className="sr-only"> — {l.name}</span>
                 </th>
               ))}
             </tr>
@@ -457,9 +443,17 @@ function VendorsTool() {
                 </td>
                 {gridLayers.map((l) => {
                   const cell = v.grid[l.id];
+                  const levelLabel =
+                    cell && cell.level > 0
+                      ? ["", "present", "strong play", "trying to own"][cell.level]
+                      : "not present";
                   return (
                     <td key={l.id} title={cell?.note} style={{ whiteSpace: "nowrap", color: "var(--crimson-deep)" }}>
-                      {cell ? "●".repeat(cell.level) || "—" : "—"}
+                      <span aria-hidden>{cell ? "●".repeat(cell.level) || "—" : "—"}</span>
+                      <span className="sr-only">
+                        {levelLabel}
+                        {cell?.note ? ` — ${cell.note}` : ""}
+                      </span>
                     </td>
                   );
                 })}

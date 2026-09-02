@@ -180,12 +180,7 @@ export function DecisionTreeView() {
         {decisionTree.map((b) => (
           <button
             key={b.id}
-            className="btn btn-sm"
-            style={
-              branch === b.id
-                ? { background: "var(--ink)", color: "white", border: "1px solid var(--ink)" }
-                : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-            }
+            className="btn btn-sm btn-toggle"
             onClick={() => setBranch(b.id)}
             aria-pressed={branch === b.id}
           >

@@ -64,7 +64,7 @@ export default function ProgressPage() {
                   <Link
                     key={l.id}
                     to={`/learn/${l.id}`}
-                    className="panel-white"
+                    className="panel-white panel-link"
                     style={{ display: "flex", gap: 12, alignItems: "center", padding: "11px 16px", color: "var(--ink)" }}
                   >
                     <span style={{ fontSize: "var(--fs-sm)", fontWeight: 500, flex: 1 }}>
@@ -94,7 +94,7 @@ export default function ProgressPage() {
                   <Link
                     key={s.id}
                     to={`/scenarios/${s.id}`}
-                    className="panel-white"
+                    className="panel-white panel-link"
                     style={{ display: "flex", gap: 12, alignItems: "center", padding: "11px 16px", color: "var(--ink)" }}
                   >
                     <span style={{ fontSize: "var(--fs-sm)", fontWeight: 500, flex: 1 }}>{s.title}</span>
