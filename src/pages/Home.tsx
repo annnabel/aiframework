@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* The numbers */}
       <section className="container" style={{ paddingBottom: 40 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(260px, 1fr) 2fr", gap: 32, alignItems: "start" }}>
+        <div className="why-grid">
           <div>
             <h2 style={{ fontSize: "var(--fs-xl)" }}>Why understanding beats adopting</h2>
             <p style={{ fontSize: "var(--fs-sm)", color: "var(--ink-2)" }}>

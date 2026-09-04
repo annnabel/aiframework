@@ -30,9 +30,13 @@ function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    // move screen-reader/keyboard context to the new page's content
+    document.getElementById("main")?.focus({ preventScroll: true });
   }, [pathname]);
   return null;
 }
+
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
 
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -86,19 +90,23 @@ export default function App() {
             ))}
           </nav>
           <div className="topbar-actions">
-            <button className="search-btn" onClick={() => setSearchOpen(true)} aria-label="Search (Ctrl+K)">
+            <button
+              className="search-btn"
+              onClick={() => setSearchOpen(true)}
+              aria-label={`Search (${isMac ? "Cmd" : "Ctrl"}+K)`}
+            >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
                 <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
                 <path d="M11 11l3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
               <span className="search-label">Search</span>
-              <kbd>⌘K</kbd>
+              <kbd aria-hidden>{isMac ? "⌘K" : "Ctrl K"}</kbd>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="main" id="main">
+      <main className="main" id="main" tabIndex={-1} style={{ outline: "none" }}>
         <Suspense
           fallback={
             <div className="container" style={{ padding: "80px 24px", color: "var(--ink-3)" }}>

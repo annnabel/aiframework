@@ -18,7 +18,7 @@ export default function SourcesPage() {
           <Link
             key={d.id}
             to={`/sources/${d.id}`}
-            className="panel-white"
+            className="panel-white panel-link"
             style={{ display: "flex", gap: 16, alignItems: "baseline", color: "var(--ink)", padding: "13px 18px" }}
           >
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--fs-sm)", color: "var(--ink-3)", flexShrink: 0 }}>

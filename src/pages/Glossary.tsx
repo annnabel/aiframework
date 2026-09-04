@@ -45,21 +45,7 @@ export default function Glossary() {
         </p>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          flexWrap: "wrap",
-          alignItems: "center",
-          margin: "24px 0",
-          position: "sticky",
-          top: 56,
-          background: "oklch(1 0 0 / 0.92)",
-          backdropFilter: "blur(8px)",
-          padding: "10px 0",
-          zIndex: 50,
-        }}
-      >
+      <div className="filter-bar">
         <input
           type="search"
           placeholder="Filter terms…"
@@ -95,12 +81,12 @@ export default function Glossary() {
             </option>
           ))}
         </select>
-        <div className="mode-toggle" role="tablist" aria-label="Filter by difficulty">
-          <button role="tab" aria-selected={diff === "all"} className={diff === "all" ? "active" : ""} onClick={() => setDiff("all")}>
+        <div className="mode-toggle" role="group" aria-label="Filter by difficulty">
+          <button aria-pressed={diff === "all"} className={diff === "all" ? "active" : ""} onClick={() => setDiff("all")}>
             All
           </button>
           {difficulties.map((d) => (
-            <button key={d.id} role="tab" aria-selected={diff === d.id} className={diff === d.id ? "active" : ""} onClick={() => setDiff(d.id)}>
+            <button key={d.id} aria-pressed={diff === d.id} className={diff === d.id ? "active" : ""} onClick={() => setDiff(d.id)}>
               {d.label}
             </button>
           ))}
@@ -137,12 +123,17 @@ export default function Glossary() {
                   <Link
                     key={c.id}
                     to={`/concept/${c.id}`}
-                    className="panel-white"
+                    className="panel-white panel-link"
                     style={{ color: "var(--ink)", padding: "13px 16px", display: "block" }}
                   >
                     <span style={{ display: "flex", gap: 8, alignItems: "baseline", flexWrap: "wrap" }}>
                       <strong style={{ fontSize: "var(--fs-sm)" }}>{c.term}</strong>
-                      {c.jargon && <span className="tag tag-neutral">⚑</span>}
+                      {c.jargon && (
+                        <span className="tag tag-neutral">
+                          <span aria-hidden>⚑</span>
+                          <span className="sr-only">jargon — low strategic importance</span>
+                        </span>
+                      )}
                       <span className="tag tag-neutral" style={{ marginLeft: "auto" }}>
                         {c.difficulty}
                       </span>

@@ -205,7 +205,13 @@ function ChoiceQ({
               <span className="option-key" aria-hidden>
                 {LETTERS[displayIdx]}
               </span>
-              <span>{q.options[optIdx]}</span>
+              <span>
+                {q.options[optIdx]}
+                {answered && optIdx === q.correct && <span className="sr-only"> — correct answer</span>}
+                {answered && optIdx === picked && optIdx !== q.correct && (
+                  <span className="sr-only"> — your answer, incorrect</span>
+                )}
+              </span>
             </button>
           );
         })}
@@ -266,7 +272,13 @@ function MultiQ({
               <span className="option-key" aria-hidden>
                 {LETTERS[displayIdx]}
               </span>
-              <span>{q.options[optIdx]}</span>
+              <span>
+                {q.options[optIdx]}
+                {answered && correctSet.has(optIdx) && <span className="sr-only"> — correct answer</span>}
+                {answered && picked.has(optIdx) && !correctSet.has(optIdx) && (
+                  <span className="sr-only"> — your pick, incorrect</span>
+                )}
+              </span>
             </button>
           );
         })}

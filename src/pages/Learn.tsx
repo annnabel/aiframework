@@ -29,17 +29,14 @@ export default function Learn() {
             <Link
               key={l.id}
               to={`/learn/${l.id}`}
-              className="panel-white"
+              className="panel-white panel-link"
               style={{
                 display: "flex",
                 gap: 18,
                 alignItems: "flex-start",
                 color: "var(--ink)",
                 textDecoration: "none",
-                transition: "border-color 150ms var(--ease-out), box-shadow 150ms var(--ease-out)",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--border-strong)")}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
             >
               <span
                 aria-hidden

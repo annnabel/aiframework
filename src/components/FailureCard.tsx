@@ -46,7 +46,7 @@ export function FailureCard({ f }: { f: FailureMode }) {
       </button>
 
       {open && (
-        <div className="rise" style={{ borderTop: "1px solid var(--border)", padding: "18px 20px", display: "grid", gridTemplateColumns: "1fr auto", gap: 24 }}>
+        <div className="rise with-minimap" style={{ borderTop: "1px solid var(--border)", padding: "18px 20px", gap: 24 }}>
           <div style={{ minWidth: 0 }}>
             <div className="detail-block">
               <h4>What it looks like</h4>
@@ -66,7 +66,7 @@ export function FailureCard({ f }: { f: FailureMode }) {
             </div>
             <SourceLink ids={f.sources} />
           </div>
-          <div style={{ width: 200 }}>
+          <div className="minimap-col">
             <p style={{ fontSize: "var(--fs-xs)", color: "var(--ink-2)", marginBottom: 8 }}>
               {spansLayers ? (
                 <>

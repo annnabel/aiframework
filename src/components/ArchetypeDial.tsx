@@ -9,12 +9,12 @@ export function ArchetypeDial({ initial }: { initial?: string }) {
 
   return (
     <div>
-      <div className="dial-track" role="tablist" aria-label="Build archetypes, ordered by how much of the system you own">
+      <div className="dial-track" role="group" aria-label="Build archetypes, ordered by how much of the system you own">
         {archetypes.map((a) => (
           <button
             key={a.id}
-            role="tab"
-            aria-selected={a.id === activeId}
+            aria-pressed={a.id === activeId}
+            aria-label={`Archetype ${a.num}: ${a.name}`}
             className={`dial-stop${a.id === activeId ? " active" : ""}`}
             style={{ left: `${a.control}%` }}
             onClick={() => setActiveId(a.id)}

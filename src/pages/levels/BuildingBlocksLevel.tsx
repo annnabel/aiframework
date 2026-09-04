@@ -39,12 +39,7 @@ export function BuildingBlocksLevel() {
           {groupOrder.map((g) => (
             <button
               key={g}
-              className="btn btn-sm"
-              style={
-                openGroup === g
-                  ? { background: "var(--ink)", color: "white", border: "1px solid var(--ink)" }
-                  : { background: "var(--bg)", border: "1px solid var(--border-strong)", color: "var(--ink)" }
-              }
+              className="btn btn-sm btn-toggle"
               onClick={() => setOpenGroup(g)}
               aria-pressed={openGroup === g}
             >
@@ -64,7 +59,7 @@ export function BuildingBlocksLevel() {
                 <Link
                   key={c.id}
                   to={`/concept/${c.id}`}
-                  className="panel-white rise"
+                  className="panel-white rise panel-link"
                   style={{ display: "flex", gap: 12, alignItems: "flex-start", color: "var(--ink)", padding: "12px 16px" }}
                 >
                   <span

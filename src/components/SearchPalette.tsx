@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { search } from "../lib/search";
 
@@ -18,19 +18,33 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
   const [query, setQuery] = useState("");
   const [hot, setHot] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const paletteRef = useRef<HTMLDivElement>(null);
+  const restoreRef = useRef<HTMLElement | null>(null);
   const navigate = useNavigate();
 
-  const results = search(query);
+  const results = useMemo(() => search(query), [query]);
 
   useEffect(() => {
     if (open) {
+      restoreRef.current = document.activeElement as HTMLElement | null;
       setQuery("");
       setHot(0);
       requestAnimationFrame(() => inputRef.current?.focus());
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = "";
+        restoreRef.current?.focus?.();
+      };
     }
   }, [open]);
 
   useEffect(() => setHot(0), [query]);
+
+  // keep the active option visible while arrowing through results
+  useEffect(() => {
+    if (!open) return;
+    document.getElementById(`palette-opt-${hot}`)?.scrollIntoView({ block: "nearest" });
+  }, [hot, open]);
 
   if (!open) return null;
 
@@ -39,9 +53,19 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
     navigate(route);
   }
 
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Escape") onClose();
-    else if (e.key === "ArrowDown") {
+  function onDialogKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      onClose();
+    } else if (e.key === "Tab") {
+      // single-field dialog: keep focus on the input
+      e.preventDefault();
+      inputRef.current?.focus();
+    }
+  }
+
+  function onInputKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       setHot((h) => Math.min(h + 1, results.length - 1));
     } else if (e.key === "ArrowUp") {
@@ -58,31 +82,39 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onKeyDown={onDialogKeyDown}
     >
-      <div className="palette" role="dialog" aria-modal="true" aria-label="Search">
+      <div ref={paletteRef} className="palette" role="dialog" aria-modal="true" aria-label="Search">
         <input
           ref={inputRef}
           className="palette-input"
           placeholder="Search concepts, layers, decisions, failure modes…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={onKeyDown}
+          onKeyDown={onInputKeyDown}
+          role="combobox"
+          aria-expanded={results.length > 0}
+          aria-controls="palette-results"
+          aria-activedescendant={results.length > 0 ? `palette-opt-${hot}` : undefined}
+          aria-autocomplete="list"
           aria-label="Search query"
         />
-        <div className="palette-results" role="listbox" aria-label="Search results">
+        <div className="palette-results" id="palette-results" role="listbox" aria-label="Search results">
           {query.trim() === "" ? (
             <div className="palette-empty">
               Try “RAG”, “lock-in”, “prompt injection”, “archetype”, “HITL ratio”…
             </div>
           ) : results.length === 0 ? (
-            <div className="palette-empty">Nothing found for “{query}”.</div>
+            <div className="palette-empty" role="status">Nothing found for “{query}”.</div>
           ) : (
             results.map((r, i) => (
               <button
                 key={`${r.kind}-${r.route}-${r.title}`}
+                id={`palette-opt-${i}`}
                 className={`palette-item${i === hot ? " hot" : ""}`}
                 role="option"
                 aria-selected={i === hot}
+                tabIndex={-1}
                 onMouseEnter={() => setHot(i)}
                 onClick={() => go(r.route)}
               >

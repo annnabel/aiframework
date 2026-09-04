@@ -4,8 +4,6 @@
    thread. Layer ramp: near-neutral compute → full crimson applications;
    the control plane is the one cool hue (orthogonal in kind and colour). */
 
-@import url("https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;450;500;600;700&display=swap");
-
 :root {
   /* Surfaces */
   --bg: oklch(1 0 0);
@@ -257,6 +255,39 @@ button {
 .btn-sm { padding: 6px 12px; font-size: var(--fs-sm); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
+/* Toggle buttons: selection state driven by aria-pressed, not inline styles */
+.btn-toggle {
+  background: var(--bg);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+.btn-toggle:hover { background: var(--panel); }
+.btn-toggle[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: oklch(0.98 0 0);
+}
+.btn-toggle[aria-pressed="true"]:hover { background: oklch(0.3 0.015 30); }
+.btn-toggle-accent[aria-pressed="true"] {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: oklch(0.99 0.005 25);
+}
+.btn-toggle-accent[aria-pressed="true"]:hover { background: var(--crimson-deep); }
+
+/* Visually hidden, available to assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -301,6 +332,10 @@ a.chip:hover { border-color: var(--border-strong); background: var(--panel); tex
 }
 
 .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+/* Panels that act as links: hover affordance in CSS, works with keyboard focus too */
+a.panel-link { transition: border-color 150ms var(--ease-out), box-shadow 150ms var(--ease-out); }
+a.panel-link:hover, a.panel-link:focus-visible { border-color: var(--border-strong); text-decoration: none; }
 
 .kicker {
   font-size: var(--fs-sm);
@@ -420,7 +455,7 @@ table.data tr:last-child td { border-bottom: none; }
 }
 .stackmap-plane:hover { border-color: var(--l6); box-shadow: var(--shadow-sm); }
 .stackmap-plane.selected { border-color: var(--l6); box-shadow: 0 0 0 1px var(--l6); }
-.stackmap-plane .plane-sub { font-weight: 400; font-size: var(--fs-xs); color: oklch(0.55 0.05 235); }
+.stackmap-plane .plane-sub { font-weight: 400; font-size: var(--fs-xs); color: oklch(0.45 0.05 235); }
 
 .crosscut-row {
   margin-top: 10px;
@@ -555,7 +590,7 @@ table.data tr:last-child td { border-bottom: none; }
   border: 1px solid var(--border);
   background: var(--bg);
   border-radius: 6px;
-  width: 26px; height: 26px;
+  width: 32px; height: 32px;
   display: grid; place-items: center;
   color: var(--ink-2);
   font-size: 13px;
@@ -672,6 +707,13 @@ table.data tr:last-child td { border-bottom: none; }
   place-items: center;
   transition: border-color 140ms var(--ease-out), transform 140ms var(--ease-out), background 140ms var(--ease-out);
   padding: 0;
+}
+.dial-stop::after {
+  /* invisible halo so the 26px stop meets a ~44px touch target */
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
 }
 .dial-stop:hover { transform: translate(-50%, -50%) scale(1.12); border-color: var(--ink); }
 .dial-stop.active { background: var(--crimson); border-color: var(--crimson); color: white; transform: translate(-50%, -50%) scale(1.15); }
@@ -820,6 +862,43 @@ table.data tr:last-child td { border-bottom: none; }
   background: var(--panel);
 }
 
+/* ── Shared layout patterns ─────────────────────────────────────── */
+
+/* Content + fixed-width mini-map column; stacks on small screens */
+.with-minimap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 28px;
+  align-items: start;
+}
+.minimap-col { width: 200px; }
+
+/* Home: "why understanding beats adopting" split */
+.why-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 2fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Glossary: sticky filter bar */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 24px 0;
+  position: sticky;
+  top: 56px;
+  background: color-mix(in oklch, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 10px 0;
+  z-index: calc(var(--z-sticky) - 10);
+}
+
+/* Regulation timeline: expanded detail aligns with the title column */
+.timeline-detail { padding: 0 14px 12px 144px; }
+
 /* ── Animations ─────────────────────────────────────────────────── */
 
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -839,6 +918,7 @@ table.data tr:last-child td { border-bottom: none; }
 @media (max-width: 960px) {
   .map-grid, .calc-grid { grid-template-columns: 1fr; }
   .walk-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
   .walk-steps { position: static; flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .walk-step-btn { border-left: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; }
   .walk-step-btn.active { border-color: var(--crimson); }
@@ -853,6 +933,8 @@ table.data tr:last-child td { border-bottom: none; }
   .brand span { display: none; }
   .search-btn .search-label, .search-btn kbd { display: none; }
   .dep-row, .match-row { grid-template-columns: 1fr; }
+  .with-minimap { grid-template-columns: 1fr; }
+  .timeline-detail { padding-left: 14px; }
   .stackmap { flex-direction: column; }
   .stackmap-plane { writing-mode: horizontal-tb; padding: 10px 14px; }
   .quad { grid-template-columns: 1fr; }
